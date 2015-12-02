@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin name="newsletters">
+	<title>Newsletters</title>
+	<summary>Allows to perform a mass mailing to all the users of the script and subscribers</summary>
+	<author>Intelliants LLC</author>
+	<contributor>Intelliants LLC</contributor>
+	<version>3.3.1</version>
+	<date>2015-12-02</date>
+	<compatibility>3.3.5</compatibility>
+
+	<actions>
+		<action name="newsletters_archive" url="newsletters/emails/" icon="list" pages="newsletters, newsletters_subscribers">Email archive</action>
+		<action name="subscribers_list" url="newsletters/subscribers/" icon="list" pages="newsletters, newsletters_emails">Subscribers</action>
+		<action name="subscribers_add" url="newsletters/subscribers/add/" icon="plus-alt" pages="newsletters_subscribers">Add subscriber</action>
+		<action name="newsletters_add" url="newsletters/add/" icon="plus" pages="newsletters">Add email</action>
+	</actions>
+
+	<adminpages>
+		<page name="newsletters" order="115" url="newsletters/" menus="menu" filename="queue">Newsletters</page>
+		<page name="newsletters_subscribers" parent="newsletters" url="newsletters/subscribers/" filename="subscribers">Subscribers</page>
+		<page name="newsletters_emails" parent="newsletters" url="newsletters/emails/" filename="emails">Email Archive</page>
+		<page name="newsletters_add" parent="newsletters" url="newsletters/add/" action="add" filename="queue">Add email</page>
+	</adminpages>
+
+	<pages>
+		<page name="newsletters" nofollow="1" url="newsletters/">Newsletters</page>
+	</pages>
+
+	<configgroup name="newsletters">Newsletters Subscribers</configgroup>
+	<config group="newsletters" type="radio" name="newsletters_block_fullname" values="1,0" description="Enable Fullname field on Newsletters block">0</config>
+	<config group="email_templates" name="newsletter_subscription" type="radio" values="1,0" description="Newsletter Subscription">1</config>
+	<config group="email_templates" name="newsletter_subscription_subject" type="text" description="Subject:">Newsletters from {%SITE_NAME%}</config>
+	<config group="email_templates" name="newsletter_subscription_body" type="textarea" description="Email Body">
+		<![CDATA[
+<p>Thanks for subscribing to our newsletters at {%SITE_URL%}!</p>
+<p>To confirm your subscription, please, <a href="{%SITE_URL%}newsletters/?subscribe={%NEWSLETTERS_TOKEN%}&email={%NEWSLETTERS_EMAIL%}">follow this link</a></p>
+<p>______________________________<br />
+Thank you,<br />
+{%SITE_NAME%} Administration Team<br />
+{%SITE_URL%}<br />
+</p>
+		]]>
+	</config>
+	<config group="email_templates" name="newsletter_send" type="radio" values="1,0" description="Newsletter Sending">1</config>
+	<config group="email_templates" name="newsletter_send_subject" type="text" description="Subject:">Newsletters from {%SITE_NAME%}</config>
+	<config group="email_templates" name="newsletter_send_body_to_subscribers" type="textarea" description="Email Body">
+		<![CDATA[
+<p>Greetings {%FULLNAME%}!</p>
+
+{%NEWSLETTERS_CONTENT%}
+
+<p>To unsubscribe from the newsletters please use <a href="{%SITE_URL%}newsletters/?unsubscribe={%NEWSLETTERS_TOKEN%}">this link</a>.</p>
+<p>______________________________<br />
+Thank you,<br />
+{%SITE_NAME%} Administration Team<br />
+{%SITE_URL%}<br />
+</p>
+		]]>
+	</config>
+	<config group="email_templates" name="newsletter_send_body_to_members" type="textarea" description="Email Body">
+		<![CDATA[
+<p>Greetings {%FULLNAME%}!</p>
+
+{%NEWSLETTERS_CONTENT%}
+
+<p>______________________________<br />
+Thank you,<br />
+{%SITE_NAME%} Administration Team<br />
+{%SITE_URL%}<br />
+</p>
+		]]>
+	</config>
+
+	<cron name="newsletters_mailer">*/5 * * * * plugins/newsletters/includes/cron/mailer.php</cron>
+
+	<phrases>
+		<phrase category="admin" key="from_name">From Name</phrase>
+		<phrase category="admin" key="from_mail">From Mail</phrase>
+		<phrase category="admin" key="last_sent">Last sent</phrase>
+		<phrase category="admin" key="newsletters_subscribers">Subscribers</phrase>
+		<phrase category="admin" key="newsletter">Newsletters</phrase>
+		<phrase category="admin" key="pause">Pause</phrase>
+		<phrase category="admin" key="queue_added">Emails have been added to the queue.</phrase>
+		<phrase category="admin" key="queue_empty">There are no messages.</phrase>
+		<phrase category="admin" key="queue_removed">Mail queue was removed.</phrase>
+		<phrase category="admin" key="recipients">Recipients</phrase>
+		<phrase category="admin" key="sender">Sender</phrase>
+		<phrase category="admin" key="subscribers">Subscribers</phrase>
+
+		<phrase category="common" key="subscriber_email_exists">This E-mail has already been added to the subscription list earlier</phrase>
+
+		<phrase category="frontend" key="newsletters_confirmation_code_incorrect">Token is incorrect</phrase>
+		<phrase category="frontend" key="empty_email_input">The E-mail field is empty</phrase>
+		<phrase category="frontend" key="enter_email">Enter your E-mail</phrase>
+		<phrase category="frontend" key="enter_fullname">Enter your Fullname</phrase>
+		<phrase category="frontend" key="newsletters_unsubscribed">You have been unsubscribed from the newsletters.</phrase>
+		<phrase category="frontend" key="subscribe">Subscribe</phrase>
+		<phrase category="frontend" key="subscription_email_sent">Done! Please check your inbox for the futher instructions.</phrase>
+	</phrases>
+
+	<blocks>
+		<block name="newsletters_subscription" title="Newsletters" collapsible="0" position="right" type="smarty"
+			filename="plugin:newsletters:block.newsletters.tpl"><![CDATA[]]></block>
+	</blocks>
+
+	<hooks>
+		<hook name="adminDashboardStatistics" page_type="admin"><![CDATA[$items['newsletters:newsletters'] = 'plugin';]]></hook>
+	</hooks>
+
+	<install>
+		<sql>
+			<![CDATA[
+CREATE TABLE `{prefix}newsletter_subscribers` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `date` datetime NOT NULL,
+  `fullname` varchar(50) NULL,
+  `email` varchar(50) NOT NULL,
+  `topics` text NOT NULL,
+  `token` char(32) NOT NULL,
+  `last_sent` timestamp NOT NULL,
+  `status` enum('active', 'inactive') NOT NULL default 'inactive',
+  UNIQUE `EMAIL` (`email`),
+  PRIMARY KEY (`id`)
+) {mysql_version};
+			]]>
+		</sql>
+	</install>
+
+	<install>
+		<sql>
+			<![CDATA[
+CREATE TABLE `{prefix}newsletter_messages` (
+	`id` mediumint(7) unsigned NOT NULL auto_increment,
+	`from_name` varchar(50) NOT NULL,
+	`from_mail` varchar(50) NOT NULL,
+	`subj` varchar(200) NOT NULL,
+	`body` text NOT NULL,
+	`html` tinyint(1) unsigned NOT NULL,
+	`active` tinyint(1) unsigned NOT NULL default 1,
+	`total` mediumint(7) unsigned NOT NULL,
+	PRIMARY KEY (`id`)
+) {mysql_version};
+			]]>
+		</sql>
+		<sql>
+			<![CDATA[
+CREATE TABLE `{prefix}newsletter_messages_archive` (
+	`id` mediumint(7) unsigned NOT NULL auto_increment,
+	`from_name` varchar(50) NOT NULL,
+	`from_mail` varchar(50) NOT NULL,
+	`date_added` datetime NOT NULL,
+	`subj` varchar(200) NOT NULL,
+	`body` text NOT NULL,
+	`html` tinyint(1) unsigned NOT NULL,
+	`active` tinyint(1) unsigned NOT NULL default 1,
+	`total` mediumint(7) unsigned NOT NULL,
+	PRIMARY KEY (`id`)
+) {mysql_version};
+			]]>
+		</sql>
+		<sql>
+			<![CDATA[
+CREATE TABLE `{prefix}newsletter_recipients` (
+	`id` int(8) unsigned NOT NULL auto_increment,
+	`message_id` mediumint(7) unsigned NOT NULL,
+	`recipients` text NOT NULL,
+	PRIMARY KEY (`id`)
+) {mysql_version};
+			]]>
+		</sql>
+	</install>
+
+	<uninstall>
+		<sql>
+			<![CDATA[
+DROP TABLE IF EXISTS `{prefix}newsletter_subscribers`, `{prefix}newsletter_messages`,
+	`{prefix}newsletter_recipients`, `{prefix}newsletter_messages_archive`;
+			]]>
+		</sql>
+	</uninstall>
+</plugin>
