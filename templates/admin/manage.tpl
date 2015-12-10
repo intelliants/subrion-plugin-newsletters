@@ -10,14 +10,14 @@
 			<div class="row">
 				<label class="col col-lg-2 control-label" for="input-from_name">{lang key='from_name'}</label>
 				<div class="col col-lg-4">
-					<input type="text" name="from_name" value="{$item.from_name}" id="input-from_name">
+					<input type="text" name="from_name" value="{$item.from_name|escape:'html'}" id="input-from_name">
 				</div>
 			</div>
 
 			<div class="row">
 				<label class="col col-lg-2 control-label" for="input-from_mail">{lang key='from_mail'}</label>
 				<div class="col col-lg-4">
-					<input type="text" name="from_mail" value="{$item.from_mail}" id="input-from_mail">
+					<input type="text" name="from_mail" value="{$item.from_mail|escape:'html'}" id="input-from_mail">
 				</div>
 			</div>
 
@@ -62,10 +62,10 @@
 				<label class="col col-lg-2 control-label">{lang key='type'}</label>
 				<div class="col col-lg-4">
 					<label class="radio">
-						<input type="radio" name="type" value="text"> {lang key='text'}
+						<input type="radio" name="type" value="text"{if 'text' == $item.type} checked{/if}> {lang key='text'}
 					</label>
 					<label class="radio">
-						<input type="radio" name="type" value="html" checked> {lang key='html'}
+						<input type="radio" name="type" value="html"{if 'text' != $item.type} checked{/if}> {lang key='html'}
 					</label>
 				</div>
 			</div>
@@ -73,15 +73,15 @@
 			<div class="row">
 				<label class="col col-lg-2 control-label" for="input-subj">{lang key='subject'}</label>
 				<div class="col col-lg-4">
-					<input type="text" name="subj" id="input-subj" value="{$item.subj}">
+					<input type="text" name="subj" id="input-subj" value="{$item.subj|escape:'html'}">
 				</div>
 			</div>
 
 			<div class="row">
 				<label class="col col-lg-2 control-label" for="input-body">{lang key='body'}</label>
 				<div class="col col-lg-9" id="email_body">
-					<textarea name="body" id="text_body" cols="20" rows="10" style="display:none;"></textarea>
-					{ia_wysiwyg name='html_body'}
+					<textarea name="body" id="text_body" cols="20" rows="10" style="display:none;">{$item.body|escape:'html'}</textarea>
+					{ia_wysiwyg name='html_body' value=$item.html_body}
 				</div>
 			</div>
 		</div>

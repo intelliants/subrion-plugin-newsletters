@@ -79,6 +79,7 @@ Thank you,<br />
 		<phrase category="admin" key="last_sent">Last sent</phrase>
 		<phrase category="admin" key="newsletters_subscribers">Subscribers</phrase>
 		<phrase category="admin" key="newsletter">Newsletters</phrase>
+		<phrase category="admin" key="no_recipients">Message would not have recipients.</phrase>
 		<phrase category="admin" key="pause">Pause</phrase>
 		<phrase category="admin" key="queue_added">Emails have been added to the queue.</phrase>
 		<phrase category="admin" key="queue_empty">There are no messages.</phrase>

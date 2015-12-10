@@ -5,9 +5,6 @@ class iaBackendController extends iaAbstractControllerPluginBackend
 {
 	protected $_name = 'queue';
 
-	protected $_gridColumns = array('from_name', 'subj', 'body', 'total', 'date_added');
-	protected $_gridFilters = array('status' => self::EQUAL);
-
 	protected $_processEdit = false;
 
 
@@ -52,18 +49,38 @@ class iaBackendController extends iaAbstractControllerPluginBackend
 			'from_mail' => iaUsers::getIdentity()->email,
 			'type' => 'html',
 			'subj' => '',
-			'body' => ''
+			'body' => '',
+			'html_body' => ''
 		);
 	}
 
 	protected function _preSaveEntry(array &$entry, array $data, $action)
 	{
+		parent::_preSaveEntry($entry, $data, $action);
+
 		$body = ('text' == $data['type']) ? $data['body'] : $data['html_body'];
+		$userGroups = isset($data['groups']) ? $data['groups'] : array();
 
 		list($error, $this->_messages) = $this->getHelper()->create($data['from_name'], $data['from_mail'],
-			$data['subj'], $body, ('html' == $data['type']), $data['groups'], isset($data['subscribers']), $data['st']);
+			$data['subj'], $body, ('html' == $data['type']), $userGroups, isset($data['subscribers']), $data['st']);
 
 		return !$error;
+	}
+
+	protected function _entryAdd(array $entryData)
+	{
+		return true;
+	}
+
+	protected function _setPageTitle(&$iaView, array $entryData, $action)
+	{
+		parent::_setPageTitle($iaView, $entryData, $action);
+
+		if (iaCore::ACTION_ADD == $action)
+		{
+			iaBreadcrumb::insert(iaLanguage::get('newsletter'), IA_ADMIN_URL . 'newsletters/', iaBreadcrumb::POSITION_FIRST + 1);
+			iaBreadcrumb::remove(iaBreadcrumb::POSITION_LAST);
+		}
 	}
 
 	protected function _toggle(&$iaView)

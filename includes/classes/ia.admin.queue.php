@@ -48,7 +48,7 @@ class iaQueue extends abstractPlugin
 		if (empty($fromMail) || !iaValidate::isEmail($fromMail))
 		{
 			$error = true;
-			$messages[] = iaLanguage::get('from_email_err');
+			$messages[] = iaLanguage::get('error_email_incorrect');
 		}
 		else
 		{
@@ -77,7 +77,7 @@ class iaQueue extends abstractPlugin
 		if (empty($rcpt))
 		{
 			$error = true;
-			$messages[] = iaLanguage::get('no_rcpt');
+			$messages[] = iaLanguage::get('no_recipients');
 		}
 
 		if (!$error)

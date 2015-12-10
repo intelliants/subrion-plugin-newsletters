@@ -6,7 +6,7 @@
 				<tr>
 					<th width="70%">{lang key='subject'}</th>
 					<th width="10%">{lang key='status'}</th>
-					<th>{lang key='amount'}</th>
+					<th>{lang key='recipients'}</th>
 					<th></th>
 				</tr>
 				</thead>

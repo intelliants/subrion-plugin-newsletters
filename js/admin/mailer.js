@@ -2,8 +2,7 @@ $(function()
 {
 	$('input[name="type"]').on('click', function()
 	{
-		var type = $(this).val();
-		if ('text' == type)
+		if ('text' == $(this).val())
 		{
 			$('#text_body').show();
 			$('#cke_html_body').hide();
