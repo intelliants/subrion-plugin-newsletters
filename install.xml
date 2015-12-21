@@ -4,9 +4,9 @@
 	<summary>Allows to perform a mass mailing to all the users of the script and subscribers</summary>
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
-	<version>3.3.1</version>
-	<date>2015-12-02</date>
-	<compatibility>3.3.5</compatibility>
+	<version>4.0.0</version>
+	<date>2015-12-21</date>
+	<compatibility>4.0</compatibility>
 
 	<actions>
 		<action name="newsletters_archive" url="newsletters/emails/" icon="list" pages="newsletters, newsletters_subscribers">Email archive</action>
@@ -101,7 +101,7 @@ Thank you,<br />
 
 	<blocks>
 		<block name="newsletters_subscription" title="Newsletters" collapsible="0" position="right" type="smarty"
-			filename="plugin:newsletters:block.newsletters.tpl"><![CDATA[]]></block>
+			filename="block.newsletters"><![CDATA[]]></block>
 	</blocks>
 
 	<hooks>

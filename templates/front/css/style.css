@@ -1,0 +1,8 @@
+.newsletters .form-control,
+.newsletters .alert {
+	margin-bottom: 15px;
+}
+
+.newsletters .alert {
+	padding: 8px;
+}
