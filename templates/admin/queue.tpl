@@ -91,4 +91,4 @@
 		</div>
 	</div>
 </form>
-{ia_add_media files='js:_IA_URL_plugins/newsletters/js/admin/mailer'}
+{ia_add_media files='js:_IA_URL_modules/newsletters/js/admin/mailer'}

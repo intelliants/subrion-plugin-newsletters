@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 
-class iaBackendController extends iaAbstractControllerPluginBackend
+class iaBackendController extends iaAbstractControllerModuleBackend
 {
 	protected $_name = 'subscribers';
 
@@ -39,7 +39,7 @@ class iaBackendController extends iaAbstractControllerPluginBackend
 	public function init()
 	{
 		$this->_template = 'subscribers-add';
-		$this->_path = IA_ADMIN_URL . $this->getPluginName() . IA_URL_DELIMITER . $this->getName() . IA_URL_DELIMITER;
+		$this->_path = IA_ADMIN_URL . $this->getModuleName() . IA_URL_DELIMITER . $this->getName() . IA_URL_DELIMITER;
 
 		if (iaView::REQUEST_HTML == $this->_iaCore->iaView->getRequestType())
 		{

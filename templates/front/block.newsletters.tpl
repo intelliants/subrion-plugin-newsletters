@@ -11,7 +11,7 @@
 		<button type="button" class="btn btn-success btn-block" id="newsletters-subscribe"><span class="fa fa-check-square-o"></span> {lang key="subscribe"}</button>
 	</div>
 </div>
-{ia_print_css files='_IA_URL_plugins/newsletters/templates/front/css/style'}
+{ia_print_css files='_IA_URL_modules/newsletters/templates/front/css/style'}
 {ia_add_js}
 $(function()
 {

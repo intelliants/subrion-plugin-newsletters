@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 
-class iaBackendController extends iaAbstractControllerPluginBackend
+class iaBackendController extends iaAbstractControllerModuleBackend
 {
 	protected $_name = 'queue';
 
@@ -37,7 +37,7 @@ class iaBackendController extends iaAbstractControllerPluginBackend
 
 		$this->_path = IA_ADMIN_URL . 'newsletters' . IA_URL_DELIMITER;
 
-		$this->setHelper($this->_iaCore->factoryPlugin($this->getPluginName(), iaCore::ADMIN, $this->getName()));
+		$this->setHelper($this->_iaCore->factoryPlugin($this->getModuleName(), iaCore::ADMIN, $this->getName()));
 	}
 
 	public function _indexPage(&$iaView)

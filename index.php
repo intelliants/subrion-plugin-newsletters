@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 
-$iaNewsletter = $iaCore->factoryPlugin(IA_CURRENT_PLUGIN, iaCore::FRONT, 'newsletter');
+$iaNewsletter = $iaCore->factoryPlugin(IA_CURRENT_MODULE);
 
 if (iaView::REQUEST_JSON == $iaView->getRequestType())
 {

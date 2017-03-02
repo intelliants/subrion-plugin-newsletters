@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 
-class iaQueue extends abstractPlugin
+class iaQueue extends abstractModuleAdmin
 {
 	const PLUGIN_NAME = 'newsletters';
 
