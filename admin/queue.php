@@ -2,7 +2,7 @@
 /******************************************************************************
  *
  * Subrion - open source content management system
- * Copyright (C) 2015 Intelliants, LLC <http://www.intelliants.com>
+ * Copyright (C) 2017 Intelliants, LLC <https://intelliants.com>
  *
  * This file is part of Subrion.
  *
@@ -20,7 +20,7 @@
  * along with Subrion. If not, see <http://www.gnu.org/licenses/>.
  *
  *
- * @link http://www.subrion.org/
+ * @link https://subrion.org/
  *
  ******************************************************************************/
 
@@ -120,16 +120,11 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 		iaUtil::go_to($this->getPath());
 	}
 
-	protected function _delete(&$iaView)
+	protected function _delete($entryId)
 	{
-		if (!isset($this->_iaCore->requestPath[0]))
-		{
-			return iaView::errorPage(iaView::ERROR_NOT_FOUND);
-		}
+		$this->getHelper()->delete($entryId);
 
-		$this->getHelper()->delete((int)$this->_iaCore->requestPath[0]);
-
-		$iaView->setMessages(iaLanguage::get('queue_removed'), iaView::SUCCESS);
+		$this->_iaCore->iaView->setMessages(iaLanguage::get('queue_removed'), iaView::SUCCESS);
 
 		iaUtil::go_to($this->getPath());
 	}

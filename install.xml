@@ -5,19 +5,19 @@
 	<author>Intelliants LLC</author>
 	<contributor>Intelliants LLC</contributor>
 	<version>4.1.0</version>
-	<date>2017-03-02</date>
+	<date>2017-03-06</date>
 	<compatibility>4.1</compatibility>
 
 	<actions>
-		<action name="newsletters_archive" url="newsletters/emails/" icon="list" pages="newsletters, newsletters_subscribers">Newsletter Archive</action>
-		<action name="subscribers_list" url="newsletters/subscribers/" icon="list" pages="newsletters, newsletters_emails">Subscribers</action>
-		<action name="subscribers_add" url="newsletters/subscribers/add/" icon="plus-alt" pages="newsletters_subscribers">Add Subscriber</action>
-		<action name="newsletters_add" url="newsletters/add/" icon="plus" pages="newsletters">page_title_newsletters_add</action>
+		<action name="newsletter_archive" url="newsletters/emails/" icon="list" pages="newsletters, newsletters_subscribers"><![CDATA[]]></action>
+		<action name="subscribers" url="newsletters/subscribers/" icon="list" pages="newsletters, newsletters_emails"><![CDATA[]]></action>
+		<action name="add_subscriber" url="newsletters/subscribers/add/" icon="plus-alt" pages="newsletters_subscribers"><![CDATA[]]></action>
+		<action name="newsletters_add" url="newsletters/add/" icon="plus" pages="newsletters"><![CDATA[]]></action>
 	</actions>
 
 	<adminpages>
 		<page name="newsletters" order="115" url="newsletters/" menus="menu" filename="queue">Newsletters</page>
-		<page name="newsletters_subscribers" parent="newsletters" url="newsletters/subscribers/" filename="subscribers">Newsletters Subscribers</page>
+		<page name="newsletters_subscribers" parent="newsletters" url="newsletters/subscribers/" filename="subscribers">Subscribers</page>
 		<page name="newsletters_emails" parent="newsletters" url="newsletters/emails/" filename="emails">Email Archive</page>
 		<page name="newsletters_add" parent="newsletters" url="newsletters/add/" action="add" filename="queue">Add email</page>
 	</adminpages>
