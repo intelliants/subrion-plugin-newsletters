@@ -71,7 +71,7 @@ Thank you,<br />
         ]]>
     </config>
 
-    <cron name="newsletters_mailer">*/5 * * * * plugins/newsletters/includes/cron/mailer.php</cron>
+    <cron name="newsletters_mailer">*/5 * * * * modules/newsletters/includes/cron/mailer.php</cron>
 
     <phrases>
         <phrase category="admin" key="from_name">From Name</phrase>
