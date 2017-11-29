@@ -28,30 +28,27 @@ $currentCategory = isset($_GET['c']) && is_numeric($_GET['c']) ? (int)$_GET['c']
 $parentId = isset($_GET['p']) ? (int)$_GET['p'] : -1;
 $categoryId = isset($_GET['i']) ? (int)$_GET['i'] : null;
 
-if ($categoryId === null)
-{
-	$categories[] = array('id' => 1, 'title' => iaLanguage::get('all'));
-}
-else
-{
-	$categories = $iaCore->iaDb->all('`id`, `title`', '`pid` = ' . $categoryId . ' ORDER BY `title`', null, null, 'autos_models');
+if (null === $categoryId) {
+    $categories[] = ['id' => 1, 'title' => iaLanguage::get('all')];
+} else {
+    $categories = $iaDb->all('`id`, `title`', '`pid` = ' . $categoryId . ' ORDER BY `title`', null, null, 'autos_models');
 }
 
 $out = array();
 
-foreach ($categories as $item)
-{
-	$rel = 'default';
+foreach ($categories as $item) {
+    $rel = 'default';
 
-	$out[] = array(
-		'attr' => array(
-			'id' => $item['id'],
-			'rel' => $rel,
-			'title' => $item['id'] == $currentCategory ? iaLanguage::get('locked') : '',
-		),
-		'cls' => 'folder',
-		'data' => $item['title'],
-		'state' => 'closed'
-	);
+    $out[] = [
+        'attr' => [
+            'id' => $item['id'],
+            'rel' => $rel,
+            'title' => $item['id'] == $currentCategory ? iaLanguage::get('locked') : '',
+        ],
+        'cls' => 'folder',
+        'data' => $item['title'],
+        'state' => 'closed'
+    ];
 }
+
 $iaView->assign($out);

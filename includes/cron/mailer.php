@@ -24,58 +24,55 @@
  *
  ******************************************************************************/
 
-if ($queue = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, null, 'newsletter_recipients'))
-{
-	$iaDb->setTable('newsletter_messages');
+if ($queue = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, null, 'newsletter_recipients')) {
+    $iaDb->setTable('newsletter_messages');
 
-	$iaMailer = $iaCore->factory('mailer');
+    $iaMailer = $iaCore->factory('mailer');
 
-	$recipients = explode(',', $queue['recipients']);
-	$stmt = '`id` = :id AND `active` = :status';
-	$iaDb->bind($stmt, array('id' => $queue['message_id'], 'status' => 1));
-	if ($m = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $stmt))
-	{
-		if ($m['html'])
-		{
-			$iaMailer->isHTML(true);
-		}
+    $recipients = explode(',', $queue['recipients']);
+    $stmt = '`id` = :id AND `active` = :status';
+    $iaDb->bind($stmt, ['id' => $queue['message_id'], 'status' => 1]);
 
-		$iaMailer->clearAddresses();
-		$iaMailer->FromName = $m['from_name'];
-		$iaMailer->From = $m['from_mail'];
-		$iaMailer->Subject = $m['subj'];
+    if ($message = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $stmt)) {
+        if ($message['html']) {
+            $iaMailer->isHTML(true);
+        }
 
-		foreach($recipients as $email)
-		{
-			$stmt = '`email` = :email';
-			$iaDb->bind($stmt, array('email' => $email));
+        $iaMailer->clearAddresses();
 
-			if ($subscriber = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $stmt, 'newsletter_subscribers'))
-			{
-				$subscriber['fullname'] = $subscriber['fullname'] ? $subscriber['fullname'] : '';
-				$mBody = str_replace('{%NEWSLETTERS_TOKEN%}', $subscriber['token'], $iaCore->get('newsletter_send_body_to_subscribers'));
-				$mBody = str_replace('{%NEWSLETTERS_CONTENT%}', $m['body'], $mBody);
-				$mBody = str_replace('{%FULLNAME%}', $subscriber['fullname'], $mBody);
-			}
-			else
-			{
-				$fullname = $iaDb->one('`fullname`', "`email` = '{$email}'", iaUsers::getTable());
-				$mBody = str_replace('{%NEWSLETTERS_CONTENT%}', $m['body'], $iaCore->get('newsletter_send_body_to_members'));
-				$mBody = str_replace('{%FULLNAME%}', $fullname, $mBody);
-			}
+        $iaMailer->FromName = $message['from_name'];
+        $iaMailer->From = $message['from_mail'];
 
-			$iaMailer->Body = $mBody;
-			$iaMailer->addAddress($email);
+        foreach ($recipients as $email) {
+            $stmt = iaDb::convertIds($email, 'email');
 
-			$iaMailer->send();
-		}
+            if ($subscriber = $iaDb->row(iaDb::ALL_COLUMNS_SELECTION, $stmt, 'newsletter_subscribers')) {
+                $iaMailer->loadTemplate('newsletter_send_subscribers');
+                $iaMailer->setReplacements([
+                    'fullname' => $subscriber['fullname'] ? $subscriber['fullname'] : '',
+                    'newslettersToken' => $subscriber['token']
+                ]);
+            } else {
+                $iaMailer->loadTemplate('newsletter_send_members');
+                $iaMailer->setReplacements([
+                    'fullname' => $iaDb->one('`fullname`', "`email` = '{$email}'", iaUsers::getTable()),
+                ]);
+            }
 
-		$iaDb->delete(iaDb::convertIds($queue['id']), 'newsletter_recipients');
+            $iaMailer->setSubject($message['subj']);
+            $iaMailer->setReplacements('newslettersContent', $message['body'], true);
 
-		$iaDb->exists('`message_id` =  ' . $m['id'], null, 'newsletter_recipients')
-			? $iaDb->update(null, '`id` = ' . $m['id'], array('total' => '`total` - ' . count($recipients)))
-			: $iaDb->delete(iaDb::convertIds($m['id']));
-	}
+            $iaMailer->addAddress($email);
 
-	$iaDb->resetTable();
+            $iaMailer->send();
+        }
+
+        $iaDb->delete(iaDb::convertIds($queue['id']), 'newsletter_recipients');
+
+        $iaDb->exists('`message_id` =  ' . $message['id'], null, 'newsletter_recipients')
+            ? $iaDb->update(null, iaDb::convertIds($message['id']), ['total' => '`total` - ' . count($recipients)])
+            : $iaDb->delete(iaDb::convertIds($message['id']));
+    }
+
+    $iaDb->resetTable();
 }

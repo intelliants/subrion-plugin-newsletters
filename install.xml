@@ -4,9 +4,9 @@
     <summary>Allows to perform a mass mailing to all the users of the script and subscribers</summary>
     <author>Intelliants LLC</author>
     <contributor>Intelliants LLC</contributor>
-    <version>4.1.0</version>
-    <date>2017-03-06</date>
-    <compatibility>4.1</compatibility>
+    <version>4.2.0</version>
+    <date>2017-11-29</date>
+    <compatibility>4.2</compatibility>
 
     <actions>
         <action name="newsletter_archive" url="newsletters/emails/" icon="list" pages="newsletters, newsletters_subscribers"><![CDATA[]]></action>
@@ -26,52 +26,58 @@
         <page name="newsletters" nofollow="1" url="newsletters/">Newsletters</page>
     </pages>
 
+    <emails>
+        <email description="Newsletters" divider="1"><![CDATA[]]></email>
+        <email name="newsletter_subscription"
+               description="Newsletter Subscription"
+               subject="Newsletters from {$siteName}">
+            <![CDATA[
+<p>Thanks for subscribing to our newsletters at {$siteUrl}!</p>
+<p>To confirm your subscription, please, <a href="{$siteUrl}newsletters/?subscribe={$newslettersToken}&email={$newslettersEmail}">follow this link</a></p>
+<p>______________________________<br />
+Thank you,<br />
+{$siteName} Administration Team<br />
+{$siteUrl}<br />
+</p>
+            ]]>
+        </email>
+        <email name="newsletter_send_subscribers"
+               description="Newsletter Sending - Subscribers"
+               subject="Newsletters from {$siteName}">
+            <![CDATA[
+<p>Greetings {$fullName}!</p>
+
+{$newslettersContent}
+
+<p>To unsubscribe from the newsletters please use <a href="{$siteUrl}newsletters/?unsubscribe={$newslettersToken}">this link</a>.</p>
+<p>______________________________<br />
+Thank you,<br />
+{$siteName} Administration Team<br />
+{$siteUrl}<br />
+</p>
+            ]]>
+        </email>
+        <email name="newsletter_send_members"
+               description="Newsletter Sending - Members"
+               subject="Newsletters from {$siteName}">
+            <![CDATA[
+<p>Greetings {$fullName}!</p>
+
+{$newslettersContent}
+
+<p>______________________________<br />
+Thank you,<br />
+{$siteName} Administration Team<br />
+{$siteUrl}<br />
+</p>
+            ]]>
+        </email>
+    </emails>
+
     <configgroup name="newsletters">Newsletters Subscribers</configgroup>
     <config group="newsletters" type="radio" name="newsletters_block_fullname" values="1,0" description="Enable Fullname field on Newsletters block">0</config>
-    <config group="email_templates" name="newsletter_subscription" type="radio" values="1,0" description="Newsletter Subscription">1</config>
-    <config group="email_templates" name="newsletter_subscription_subject" type="text" description="Subject:">Newsletters from {%SITE_NAME%}</config>
-    <config group="email_templates" name="newsletter_subscription_body" type="textarea" description="Email Body">
-        <![CDATA[
-<p>Thanks for subscribing to our newsletters at {%SITE_URL%}!</p>
-<p>To confirm your subscription, please, <a href="{%SITE_URL%}newsletters/?subscribe={%NEWSLETTERS_TOKEN%}&email={%NEWSLETTERS_EMAIL%}">follow this link</a></p>
-<p>______________________________<br />
-Thank you,<br />
-{%SITE_NAME%} Administration Team<br />
-{%SITE_URL%}<br />
-</p>
-        ]]>
-    </config>
-    <config group="email_templates" name="newsletter_send" type="radio" values="1,0" description="Newsletter Sending">1</config>
-    <config group="email_templates" name="newsletter_send_subject" type="text" description="Subject:">Newsletters from {%SITE_NAME%}</config>
-    <config group="email_templates" name="newsletter_send_body_to_subscribers" type="textarea" description="Email Body">
-        <![CDATA[
-<p>Greetings {%FULLNAME%}!</p>
 
-{%NEWSLETTERS_CONTENT%}
-
-<p>To unsubscribe from the newsletters please use <a href="{%SITE_URL%}newsletters/?unsubscribe={%NEWSLETTERS_TOKEN%}">this link</a>.</p>
-<p>______________________________<br />
-Thank you,<br />
-{%SITE_NAME%} Administration Team<br />
-{%SITE_URL%}<br />
-</p>
-        ]]>
-    </config>
-    <config group="email_templates" name="newsletter_send_body_to_members" type="textarea" description="Email Body">
-        <![CDATA[
-<p>Greetings {%FULLNAME%}!</p>
-
-{%NEWSLETTERS_CONTENT%}
-
-<p>______________________________<br />
-Thank you,<br />
-{%SITE_NAME%} Administration Team<br />
-{%SITE_URL%}<br />
-</p>
-        ]]>
-    </config>
-
-    <cron name="newsletters_mailer">*/5 * * * * modules/newsletters/includes/cron/mailer.php</cron>
+    <cron name="Newsletters queue">*/5 * * * * modules/newsletters/includes/cron/mailer.php</cron>
 
     <phrases>
         <phrase category="admin" key="from_name">From Name</phrase>
@@ -91,7 +97,7 @@ Thank you,<br />
         <phrase category="admin" key="newsletter_archive">Email archive</phrase>
         <phrase category="admin" key="add_subscriber">Add Subscriber</phrase>
 
-        <phrase category="common" key="subscriber_email_exists">This E-mail has already been added to the subscription list earlier</phrase>
+        <phrase category="common" key="subscriber_email_exists">This E-mail has already been added to the subscription list earlier.</phrase>
 
         <phrase category="frontend" key="newsletters_confirmed">Email is confirmed. Thanks!</phrase>
         <phrase category="frontend" key="newsletters_confirmation_code_incorrect">Token is incorrect</phrase>
@@ -105,7 +111,7 @@ Thank you,<br />
 
     <blocks>
         <block name="newsletters_subscription" title="Newsletters" collapsible="0" position="right" type="smarty"
-            filename="block.newsletters"><![CDATA[]]></block>
+            filename="block.newsletters.tpl"><![CDATA[]]></block>
     </blocks>
 
     <hooks>
