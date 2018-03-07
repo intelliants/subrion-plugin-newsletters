@@ -2,7 +2,7 @@
 /******************************************************************************
  *
  * Subrion - open source content management system
- * Copyright (C) 2017 Intelliants, LLC <https://intelliants.com>
+ * Copyright (C) 2018 Intelliants, LLC <https://intelliants.com>
  *
  * This file is part of Subrion.
  *
@@ -28,6 +28,8 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 {
     protected $_name = 'queue';
 
+    protected $_helperName = 'queue';
+
     protected $_processEdit = false;
 
 
@@ -36,13 +38,12 @@ class iaBackendController extends iaAbstractControllerModuleBackend
         parent::__construct();
 
         $this->_path = IA_ADMIN_URL . 'newsletters' . IA_URL_DELIMITER;
-
-        $this->setHelper($this->_iaCore->factoryPlugin($this->getModuleName(), iaCore::ADMIN, $this->getName()));
     }
 
     public function _indexPage(&$iaView)
     {
         if (isset($this->_iaCore->requestPath[0]) && 'toggle' == $this->_iaCore->requestPath[0]) {
+
             return $this->_toggle($iaView);
         }
 
