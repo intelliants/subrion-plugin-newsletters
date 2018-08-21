@@ -37,7 +37,7 @@ class iaBackendController extends iaAbstractControllerModuleBackend
 
         $this->_path = IA_ADMIN_URL . 'newsletters' . IA_URL_DELIMITER;
 
-        $this->setHelper($this->_iaCore->factoryPlugin($this->getModuleName(), iaCore::ADMIN, $this->getName()));
+        $this->setHelper($this->_iaCore->factoryModule($this->getName(), $this->getModuleName()));
     }
 
     public function _indexPage(&$iaView)
