@@ -11,7 +11,9 @@
         <button type="button" class="btn btn-success btn-block" id="newsletters-subscribe"><span class="fa fa-check-square-o"></span> {lang key="subscribe"}</button>
     </div>
 </div>
+
 {ia_print_css files='_IA_URL_modules/newsletters/templates/front/css/style'}
+
 {ia_add_js}
 $(function(){
     $('#newsletters-subscribe').click(function(){
@@ -26,7 +28,7 @@ $(function(){
             $('#newsletters-msg .msg').html(_t('empty_email_input'));
         } else {
             $.ajax({
-                url: intelli.config.ia_url + 'newsletters/read.json',
+                url: intelli.config.url + 'newsletters/read.json',
                 data: { subscriber_email: $emailInput.val(), subscriber_fullname: $fullnameInput.val()},
                 dataType: 'json',
                 async: false,

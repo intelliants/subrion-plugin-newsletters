@@ -2,7 +2,7 @@
 /******************************************************************************
  *
  * Subrion - open source content management system
- * Copyright (C) 2017 Intelliants, LLC <https://intelliants.com>
+ * Copyright (C) 2018 Intelliants, LLC <https://intelliants.com>
  *
  * This file is part of Subrion.
  *
@@ -67,6 +67,8 @@ if (iaView::REQUEST_JSON == $iaView->getRequestType()) {
         }
 
         $iaView->assign($response);
+
+
     }
 }
 
@@ -96,4 +98,5 @@ if (iaView::REQUEST_HTML == $iaView->getRequestType()) {
     $iaView->setMessages($messages, $error ? iaView::ERROR : iaView::SUCCESS);
 
     $iaView->display(iaView::NONE);
+
 }
