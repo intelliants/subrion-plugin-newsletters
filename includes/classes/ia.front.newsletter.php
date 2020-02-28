@@ -91,6 +91,6 @@ class iaNewsletter extends abstractCore
         $stmt = '`email` = :email AND `token` = :token';
         $this->iaDb->bind($stmt, array('email' => $email, 'token' => $token));
 
-        return (bool)$this->iaDb->update(['status' => iaCore::STATUS_ACTIVE], $stmt, null, self::getTable());
+        return $this->iaDb->update(['status' => iaCore::STATUS_ACTIVE], $stmt, null, self::getTable());
     }
 }
